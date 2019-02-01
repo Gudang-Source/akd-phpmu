@@ -26,7 +26,8 @@ if(file_exists($direktori.$filename)){
 	  exit;
 	}
 	else{
-	  mysql_query("update download set hits=hits+1 where nama_file='$filename'");
+		include "config/koneksi.php";
+	  mysqli_query(dblink(), "update download set hits=hits+1 where nama_file='$filename'");
 
 	  header("Content-Type: octet/stream");
 	  header("Pragma: private"); 

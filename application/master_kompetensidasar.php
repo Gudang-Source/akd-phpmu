@@ -53,23 +53,25 @@
                     
                     }
                     $no = 1;
-                    while($r=mysqli_fetch_array($tampil)){
-                    echo "<tr><td>$no</td>
-                              <td>".$r['namamatapelajaran']."</td>
-                              <td>".$r['nama_kelas']."</td>
-                              <td>".$r['nama_guru']."</td>
-                              <td>".$r['hari']."</td>
-                              <td>".$r['jam_mulai']."</td>
-                              <td>".$r['jam_selesai']."</td>
-                              <td>".$r['nama_ruangan']."</td>";
-                              if($_SESSION['level']!='kepala'){
-                                echo "<td style='width:80px !important'><center>
-                                        <a class='btn btn-success btn-xs' title='Lihat Kompetensi Dasar' href='index.php?view=kompetensidasar&act=lihat&id=".$r['kodejdwl']."'><span class='glyphicon glyphicon-search'></span> Lihat Indikator</a>
-                                      </center></td>";
-                              }
-                            echo "</tr>";
-                      $no++;
+                    if(isset($tampil)) {
+                      while($r=mysqli_fetch_array($tampil)){
+                        echo "<tr><td>$no</td>
+                        <td>".$r['namamatapelajaran']."</td>
+                        <td>".$r['nama_kelas']."</td>
+                        <td>".$r['nama_guru']."</td>
+                        <td>".$r['hari']."</td>
+                        <td>".$r['jam_mulai']."</td>
+                        <td>".$r['jam_selesai']."</td>
+                        <td>".$r['nama_ruangan']."</td>";
+                        if($_SESSION['level']!='kepala'){
+                          echo "<td style='width:80px !important'><center>
+                          <a class='btn btn-success btn-xs' title='Lihat Kompetensi Dasar' href='index.php?view=kompetensidasar&act=lihat&id=".$r['kodejdwl']."'><span class='glyphicon glyphicon-search'></span> Lihat Indikator</a>
+                          </center></td>";
+                        }
+                        echo "</tr>";
+                        $no++;
                       }
+                    }
 
                       if (isset($_GET['hapus'])){
                         mysqli_query(dblink(), "DELETE FROM rb_jadwal_pelajaran where kodejdwl='".$_GET['hapus']."'");
@@ -80,7 +82,7 @@
                   </table>
                 </div><!-- /.box-body -->
                 <?php 
-                    if ($_GET['kelas'] == ''){
+                    if (!isset($_GET['kelas']) OR $_GET['kelas'] == ''){
                         echo "<center style='padding:60px; color:red'>Silahkan Memilih Kelas Terlebih dahulu...</center>";
                     }
                 ?>
