@@ -6,12 +6,12 @@
                   <h3 class='box-title'>Kirimkan Pesan Singkat (SMS)</h3>
                 </div>
               <div class='box-body'>";
-              		if (isset($_POST[kirim])){
-						$hasil = mysqli_query(dblink(), "INSERT INTO rb_sms VALUES('','$_POST[a]','$_POST[b]')");
+              		if (isset($_POST['kirim'])){
+						$hasil = mysqli_query(dblink(), "INSERT INTO rb_sms VALUES('','".$_POST['a']."','".$_POST['b']."')");
 						if ($hasil){
 							echo "<div class='alert alert-success alert-dismissible fade in' role='alert'> 
 									<button type='button' class='close' data-dismiss='alert' aria-label='Close'>
-									<span aria-hidden='true'>×</span></button> <strong>Success!</strong> - Pesan SMS ke $_POST[a] Telah dikirim,...
+									<span aria-hidden='true'>×</span></button> <strong>Success!</strong> - Pesan SMS ke ".$_POST['a']." Telah dikirim,...
 								  </div>";
 						}else{
 							echo "<center style='color:red; padding:15px 0px'>Pengiriman SMS gagal,...</center>";

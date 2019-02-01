@@ -1,4 +1,4 @@
-<?php if ($_GET[act]==''){ ?> 
+<?php if (!isset($_GET['act']) OR $_GET['act']==''){ ?> 
             <div class="col-xs-12">  
               <div class="box">
                 <div class="box-header">
@@ -21,17 +21,17 @@
                     $no = 1;
                     while($r=mysqli_fetch_array($tampil)){
                     echo "<tr><td>$no</td>
-                              <td>$r[pesan]</td>
-                              <td>$r[nohp]</td>
-                              <td>$r[waktu]</td>
+                              <td>".$r['pesan']."</td>
+                              <td>".$r['nohp']."</td>
+                              <td>".$r['waktu']."</td>
                               <td><center>
-                                <a class='btn btn-danger btn-xs' title='Delete Data' href='index.php?view=outboxautoreply&hapus=$r[id_outbox]'><span class='glyphicon glyphicon-remove'></span></a>
+                                <a class='btn btn-danger btn-xs' title='Delete Data' href='index.php?view=outboxautoreply&hapus=".$r['id_outbox']."'><span class='glyphicon glyphicon-remove'></span></a>
                               </center></td>
                           </tr>";
                       $no++;
                       }
-                      if (isset($_GET[hapus])){
-                          mysqli_query(dblink(), "DELETE FROM rb_sms_outbox where id_outbox='$_GET[hapus]'");
+                      if (isset($_GET['hapus'])){
+                          mysqli_query(dblink(), "DELETE FROM rb_sms_outbox where id_outbox='".$_GET['hapus']."'");
                           echo "<script>document.location='index.php?view=outboxautoreply';</script>";
                       }
 

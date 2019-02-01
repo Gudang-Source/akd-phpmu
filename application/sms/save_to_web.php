@@ -24,8 +24,8 @@ if ($code == '19891989'){
 		$ar = mysql_num_rows($qr);
 		$r = mysqli_fetch_array($qr);
 		if ($ar >= 1){
-			mysqli_query(dblink(), "INSERT INTO rb_sms VALUES('','$notelp','$r[isi_pesan]')");
-			mysqli_query(dblink(), "INSERT INTO rb_sms_outbox VALUES('','$notelp','$r[isi_pesan]','".date('Y-m-d H:i:s')."')");
+			mysqli_query(dblink(), "INSERT INTO rb_sms VALUES('','$notelp','".$r['isi_pesan']."')");
+			mysqli_query(dblink(), "INSERT INTO rb_sms_outbox VALUES('','$notelp','".$r['isi_pesan']."','".date('Y-m-d H:i:s')."')");
 		}
 	}
 }

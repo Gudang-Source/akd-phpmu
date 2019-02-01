@@ -7,33 +7,33 @@
                 </div>
               <div class='box-body'>";
 
-                if (isset($_POST[kirim])){
-                    if ($_POST[aa]=='1'){
+                if (isset($_POST['kirim'])){
+                    if ($_POST['aa']=='1'){
                         $kolom = 'hp';
-                    }elseif ($_POST[aa]=='2'){
+                    }elseif ($_POST['aa']=='2'){
                         $kolom = 'no_telpon_ayah';
                     }else{
                         $kolom = 'no_telpon_ibu';
                     }
 
-                  $querysms = mysqli_query(dblink(), "SELECT * FROM rb_siswa where kode_kelas='$_POST[a]' AND $kolom !=''");
-                  $totalsiswa = mysql_num_rows(mysqli_query(dblink(), "SELECT * FROM rb_siswa where kode_kelas='$_POST[a]'"));
-                  $total = mysql_num_rows($querysms);
+                  $querysms = mysqli_query(dblink(), "SELECT * FROM rb_siswa where kode_kelas='".$_POST['a']."' AND $kolom !=''");
+                  $totalsiswa = mysqli_num_rows(mysqli_query(dblink(), "SELECT * FROM rb_siswa where kode_kelas='".$_POST['a']."'"));
+                  $total = mysqli_num_rows($querysms);
                   while ($s = mysqli_fetch_array($querysms)){
-                    if ($_POST[aa]=='1'){
-                        $target = $s[hp];
-                    }elseif ($_POST[aa]=='2'){
-                        $target = $s[no_telpon_ayah];
+                    if ($_POST['aa']=='1'){
+                        $target = $s['hp'];
+                    }elseif ($_POST['aa']=='2'){
+                        $target = $s['no_telpon_ayah'];
                     }else{
-                        $target = $s[no_telpon_ibu];
+                        $target = $s['no_telpon_ibu'];
                     }
-                      mysqli_query(dblink(), "INSERT INTO rb_sms VALUES('','$target','$_POST[b]')");
+                      mysqli_query(dblink(), "INSERT INTO rb_sms VALUES('','$target','".$_POST['b']."')");
                   }
 
-                    if ($_POST[aa]=='2'){ $ket = 'Orang Tua (Ayah)'; }elseif($_POST[aa]=='3'){ $ket = 'Orang Tua (Ibu)'; }else{}
+                    if ($_POST['aa']=='2'){ $ket = 'Orang Tua (Ayah)'; }elseif($_POST['aa']=='3'){ $ket = 'Orang Tua (Ibu)'; }else{}
                     echo "<div class='alert alert-success alert-dismissible fade in' role='alert'> 
                         <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
-                        <span aria-hidden='true'>×</span></button> <strong>Success!</strong> - Pesan SMS ke $ket siswa kelas $_POST[a] Sebanyak $total dari $totalsiswa Orang siswa Telah dikirim,...
+                        <span aria-hidden='true'>×</span></button> <strong>Success!</strong> - Pesan SMS ke $ket siswa kelas ".$_POST['a']." Sebanyak $total dari $totalsiswa Orang siswa Telah dikirim,...
                         </div>";
                 }
 
@@ -43,7 +43,7 @@
                                                                             echo "<option value=''>- Belum Terpilih -</option>";
                                                                             $kelas = mysqli_query(dblink(), "SELECT * FROM rb_kelas");
                                                                             while ($k = mysqli_fetch_array($kelas)){
-                                                                                echo "<option value='$k[kode_kelas]'>$k[kode_kelas] - $k[nama_kelas]</option>";
+                                                                                echo "<option value='".$k['kode_kelas']."'>".$k['kode_kelas']." - ".$k['nama_kelas']."</option>";
                                                                             }
                                                                           echo "</select></td></tr>
                     <tr><th>Pilih Target</th>  <td><select class='form-control' name='aa' style='width:30%' required>
