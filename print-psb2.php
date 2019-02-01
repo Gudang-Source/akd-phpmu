@@ -10,13 +10,13 @@ include "config/fungsi_indotgl.php";
 </head>
 <body onload="window.print()">
 <?php
-    $detail = mysql_query("SELECT a.*, b.*, c.nama_agama, d.nama_agama as nama_agama_ayah, e.nama_agama as nama_agama_ibu 
+    $detail = mysqli_query(dblink(), "SELECT a.*, b.*, c.nama_agama, d.nama_agama as nama_agama_ayah, e.nama_agama as nama_agama_ibu 
                             FROM rb_psb_pendaftaran a JOIN rb_jenis_kelamin b ON a.id_jenis_kelamin=b.id_jenis_kelamin
                               JOIN rb_agama c ON a.id_agama=c.id_agama 
                                 JOIN rb_agama d ON a.agama_ayah=d.id_agama 
                                   JOIN rb_agama e ON a.agama_ibu=e.id_agama 
                                     where a.id_pendaftaran='$_GET[id]'");
-    $s = mysql_fetch_array($detail);
+    $s = mysqli_fetch_array($detail);
             echo "<h3><center>YAYASAN PENDIDIKAN PHPMU <br> DATA-DATA MURID TK/SD/SMP/SMK</center></h3>
                   <table width='100%'>
                       <tr><td colspan='3'>1. Nama Siswa</td></tr>

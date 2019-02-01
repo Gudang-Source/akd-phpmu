@@ -1,11 +1,11 @@
 <?php
-$cek = mysql_num_rows(mysql_query("SELECT * FROM rb_psb_aktivasi where kode_pendaftaran='$_GET[kode]'"));
-$d = mysql_fetch_array(mysql_query("SELECT * FROM rb_psb_aktivasi where kode_pendaftaran='$_GET[kode]'"));
+$cek = mysqli_num_rows(mysqli_query(dblink(), "SELECT * FROM rb_psb_aktivasi where kode_pendaftaran='".$_GET['kode']."'"));
+$d = mysqli_fetch_array(mysqli_query(dblink(), "SELECT * FROM rb_psb_aktivasi where kode_pendaftaran='".$_GET['kode']."'"));
 if ($cek <= 0){
 	echo "<script>document.location='index.mu';</script>";
 }else{
 	if (isset($_POST['simpan'])){
-		$cek = mysql_num_rows(mysql_query("SELECT * FROM rb_psb_pendaftaran where kode_pendaftaran='$_GET[kode]'"));
+		$cek = mysqli_num_rows(mysqli_query(dblink(), "SELECT * FROM rb_psb_pendaftaran where kode_pendaftaran='".$_GET['kode']."'"));
 		if ($cek >= 1){
 			echo "<script>document.location='index.mu';</script>";
 		}else{
@@ -56,20 +56,20 @@ if ($cek <= 0){
 			$cc = anti_injection($_POST['cc']);
 
 			$tgllahir = anti_injection(tgl_simpan($_POST['tgllahir']));
-			$status = $d[status];
-			mysql_query("UPDATE rb_psb_aktivasi SET proses='1' where kode_pendaftaran='$kode'");
-			mysql_query("INSERT INTO rb_psb_pendaftaran VALUES('','$kode','$a','$b','$c','$d','$e','$tgllahir','$f','$g','$h','$i','$j','$k','$l','$m','$n','$o','$p',
+			$status = $d['status'];
+			mysqli_query(dblink(), "UPDATE rb_psb_aktivasi SET proses='1' where kode_pendaftaran='$kode'");
+			mysqli_query(dblink(), "INSERT INTO rb_psb_pendaftaran VALUES('','$kode','$a','$b','$c','$d','$e','$tgllahir','$f','$g','$h','$i','$j','$k','$l','$m','$n','$o','$p',
 															   '$q','$r','$s','$a1','$b1','$c1','$d1','$e1','$f1','$g1','$h1','$i1','$j1',
 															   '$a2','$b2','$c2','$d2','$e2','$f2','$g2','$h2','$i2','$j2','$aa','$bb','$cc','$status','".date('Y-m-d H:i:s')."')");
 
-			$idd = mysql_insert_id();
+			$idd = mysqli_insert_id();
 			   for ($i=0; $i<=6; $i++){
 			     if (isset($_POST['sa'.$i])){
 			       	$nama = $_POST['sa'.$i];
 			       	$umur = $_POST['sb'.$i];
 			       	$pendidikan = $_POST['sc'.$i];
 			        if (trim($nama) != ''){
-			       		mysql_query("INSERT INTO rb_psb_pendaftaran_saudara VALUES('','$idd','$nama','$umur','$pendidikan')");
+			       		mysqli_query(dblink(), "INSERT INTO rb_psb_pendaftaran_saudara VALUES('','$idd','$nama','$umur','$pendidikan')");
 			       	}
 			     }
 			   }
@@ -77,10 +77,10 @@ if ($cek <= 0){
 		}
 	}
 
-		if ($d[status] == 'sma'){
+		if ($d['status'] == 'sma'){
 			$sekolah = 'SMA';
 			$alert = "info";
-		}elseif ($d[status] == 'smk'){
+		}elseif ($d['status'] == 'smk'){
 			$sekolah = 'SMK';
 			$alert = "success";
 		}else{
@@ -97,7 +97,7 @@ if ($cek <= 0){
 		<label for="inputEmail3" class="col-sm-2 control-label">Nama Lengkap</label>
 		<div style="background:#fff;" class="input-group col-lg-6">
 			<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-			<input type="text" class="required form-control" value='<?php echo $d[nama_lengkap]; ?>' name="a">
+			<input type="text" class="required form-control" value='<?php echo $d['nama_lengkap']; ?>' name="a">
 		</div>
 	</div>
 	<div class="form-group">
@@ -123,9 +123,9 @@ if ($cek <= 0){
 			<select class="required form-control" name="d">
 				<option value="" selected="">- Pilih -</option>
 				<?php 
-					$jk = mysql_query("SELECT * FROM rb_jenis_kelamin");
-					while ($j = mysql_fetch_array($jk)){
-						echo "<option value='$j[id_jenis_kelamin]'>$j[jenis_kelamin]</option>";
+					$jk = mysqli_query(dblink(), "SELECT * FROM rb_jenis_kelamin");
+					while ($j = mysqli_fetch_array($jk)){
+						echo "<option value='".$j['id_jenis_kelamin']."'>".$j['jenis_kelamin']."</option>";
 					}
 				?>
 			 </select>
@@ -155,9 +155,9 @@ if ($cek <= 0){
 			<select class="required form-control" name="f">
 				<option value="" selected="">- Pilih -</option>
 				<?php 
-					$agama = mysql_query("SELECT * FROM rb_agama");
-					while ($a = mysql_fetch_array($agama)){
-						echo "<option value='$a[id_agama]'>$a[nama_agama]</option>";
+					$agama = mysqli_query(dblink(), "SELECT * FROM rb_agama");
+					while ($a = mysqli_fetch_array($agama)){
+						echo "<option value='".$a['id_agama']."'>".$a['nama_agama']."</option>";
 					}
 				?>
 			 </select>
@@ -295,9 +295,9 @@ if ($cek <= 0){
 			<td><select class="required form-control" name="d1">
 				<option value="" selected="">- Pilih -</option>
 				<?php 
-					$agama = mysql_query("SELECT * FROM rb_agama");
-					while ($a = mysql_fetch_array($agama)){
-						echo "<option value='$a[id_agama]'>$a[nama_agama]</option>";
+					$agama = mysqli_query(dblink(), "SELECT * FROM rb_agama");
+					while ($a = mysqli_fetch_array($agama)){
+						echo "<option value='".$a['id_agama']."'>".$a['nama_agama']."</option>";
 					}
 				?>
 			 </select>
@@ -305,9 +305,9 @@ if ($cek <= 0){
 			<td><select class="required form-control" name="d2">
 				<option value="" selected="">- Pilih -</option>
 				<?php 
-					$agama = mysql_query("SELECT * FROM rb_agama");
-					while ($a = mysql_fetch_array($agama)){
-						echo "<option value='$a[id_agama]'>$a[nama_agama]</option>";
+					$agama = mysqli_query(dblink(), "SELECT * FROM rb_agama");
+					while ($a = mysqli_fetch_array($agama)){
+						echo "<option value='".$a['id_agama']."'>".$a['nama_agama']."</option>";
 					}
 				?>
 			 </select>

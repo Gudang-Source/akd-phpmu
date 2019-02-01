@@ -3,7 +3,7 @@ session_start();
 error_reporting(0);
 include "config/koneksi.php"; 
 include "config/fungsi_indotgl.php"; 
-$r = mysql_fetch_array(mysql_query("SELECT * FROM rb_psb_aktivasi where id_aktivasi='$_GET[id]'"));
+$r = mysqli_fetch_array(mysqli_query(dblink(), "SELECT * FROM rb_psb_aktivasi where id_aktivasi='$_GET[id]'"));
 ?>
 <html>
 <head>

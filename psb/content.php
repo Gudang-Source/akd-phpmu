@@ -1,5 +1,5 @@
 <?php 
-	if ($_GET['view']=='home' OR $_GET['view']==''){
+	if (!isset($_GET['view']) OR $_GET['view']=='home' OR $_GET['view']==''){
 		include "view_home.php";
 	}elseif($_GET['view']=='halaman'){
 		include "view_halaman.php";

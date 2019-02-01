@@ -10,13 +10,13 @@ include "config/fungsi_indotgl.php";
 </head>
 <body onload="window.print()">
 <?php
-    $detail = mysql_query("SELECT a.*, b.*, c.nama_agama, d.nama_agama as nama_agama_ayah, e.nama_agama as nama_agama_ibu 
+    $detail = mysqli_query(dblink(), "SELECT a.*, b.*, c.nama_agama, d.nama_agama as nama_agama_ayah, e.nama_agama as nama_agama_ibu 
                             FROM rb_psb_pendaftaran a JOIN rb_jenis_kelamin b ON a.id_jenis_kelamin=b.id_jenis_kelamin
                               JOIN rb_agama c ON a.id_agama=c.id_agama 
                                 JOIN rb_agama d ON a.agama_ayah=d.id_agama 
                                   JOIN rb_agama e ON a.agama_ibu=e.id_agama 
                                     where a.id_pendaftaran='$_GET[id]'");
-    $s = mysql_fetch_array($detail);
+    $s = mysqli_fetch_array($detail);
             echo "<table width=100%>
                       <tr><td width='90px'><img style='width:80px' src='print_raport/logo.png'>
                           </td><td><b>$status PHPMU <br> BUSINESS SCHOOL </b><br> Jl.AR Hakim No.57 Telp. (0751) xxxxx Padang</td></tr>
@@ -94,8 +94,8 @@ include "config/fungsi_indotgl.php";
                       <th>Pendidikan</th>
                   </tr>";
                 $no = 1;
-                $saudara = mysql_query("SELECT * FROM rb_psb_pendaftaran_saudara where id_pendaftaran='$_GET[id]'");
-                while ($sa = mysql_fetch_array($saudara)){
+                $saudara = mysqli_query(dblink(), "SELECT * FROM rb_psb_pendaftaran_saudara where id_pendaftaran='$_GET[id]'");
+                while ($sa = mysqli_fetch_array($saudara)){
                     echo "<tr>
                               <td>$no</td>
                               <td>$sa[nama_saudara]</td>
