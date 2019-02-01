@@ -1,11 +1,11 @@
 <?php 
-if ($_GET[act]==''){ 
-    if (isset($_GET[gettanggal])){
-      $filtertgl = $_GET[gettanggal];
+if (!isset($_GET['act']) OR $_GET['act']==''){ 
+    if (isset($_GET['gettanggal'])){
+      $filtertgl = $_GET['gettanggal'];
     }else{
-      if (isset($_POST[tgl])){ $tgl = $_POST[tgl]; }else{ $tgl = date("d"); }
-      if (isset($_POST[bln])){ $bln = $_POST[bln]; }else{ $bln = date("m"); }
-      if (isset($_POST[thn])){ $thn = $_POST[thn]; }else{ $thn = date("Y"); }
+      if (isset($_POST['tgl'])){ $tgl = $_POST['tgl']; }else{ $tgl = date("d"); }
+      if (isset($_POST['bln'])){ $bln = $_POST['bln']; }else{ $bln = date("m"); }
+      if (isset($_POST['thn'])){ $thn = $_POST['thn']; }else{ $thn = date("Y"); }
       $lebartgl=strlen($tgl);
       $lebarbln=strlen($bln);
 
@@ -21,9 +21,9 @@ if ($_GET[act]==''){
       $filtertgl = $thn."-".$blnc."-".$tglc;
     }
       $ex = explode('-',$filtertgl);
-      $tahun = $ex[0];
-      $bulane = $ex[1];
-      $tanggal = $ex[2];
+      $tahun = $ex['0'];
+      $bulane = $ex['1'];
+      $tanggal = $ex['2'];
       if (substr($tanggal,0,1) == '0'){ $tgle = substr($tanggal,1,1); }else{ $tgle = substr($tanggal,0,2); }
       if (substr($bulane,0,1) == '0'){ $blnee = substr($bulane,1,1); }else{ $blnee = substr($bulane,0,2); }
 ?> 
@@ -38,10 +38,10 @@ if ($_GET[act]==''){
                             echo "<option value=''>- Pilih Tahun Akademik -</option>";
                             $tahun = mysqli_query(dblink(), "SELECT * FROM rb_tahun_akademik");
                             while ($k = mysqli_fetch_array($tahun)){
-                              if ($_GET[tahun]==$k[id_tahun_akademik]){
-                                echo "<option value='$k[id_tahun_akademik]' selected>$k[nama_tahun]</option>";
+                              if ($_GET['tahun']==$k['id_tahun_akademik']){
+                                echo "<option value='".$k['id_tahun_akademik']."' selected>".$k['nama_tahun']."</option>";
                               }else{
-                                echo "<option value='$k[id_tahun_akademik]'>$k[nama_tahun]</option>";
+                                echo "<option value='".$k['id_tahun_akademik']."'>".$k['nama_tahun']."</option>";
                               }
                             }
                         ?>
@@ -51,10 +51,10 @@ if ($_GET[act]==''){
                             echo "<option value=''>- Pilih Kelas -</option>";
                             $kelas = mysqli_query(dblink(), "SELECT * FROM rb_kelas");
                             while ($k = mysqli_fetch_array($kelas)){
-                              if ($_GET[kelas]==$k[kode_kelas]){
-                                echo "<option value='$k[kode_kelas]' selected>$k[kode_kelas] - $k[nama_kelas]</option>";
+                              if ($_GET['kelas']==$k['kode_kelas']){
+                                echo "<option value='".$k['kode_kelas']."' selected>".$k['kode_kelas']." - ".$k['nama_kelas']."</option>";
                               }else{
-                                echo "<option value='$k[kode_kelas]'>$k[kode_kelas] - $k[nama_kelas]</option>";
+                                echo "<option value='".$k['kode_kelas']."'>".$k['kode_kelas']." - ".$k['nama_kelas']."</option>";
                               }
                             }
                         ?>
@@ -78,9 +78,9 @@ if ($_GET[act]==''){
                                 $blnn = array('','Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember');
                                 for($n=1; $n<=12; $n++){
                                   if ($blnee == $n){
-                                    echo "<option value='$n' selected>$blnn[$n]</option>";
+                                    echo "<option value='$n' selected>".$blnn[$n]."</option>";
                                   }else{
-                                    echo "<option value='$n'>$blnn[$n]</option>";
+                                    echo "<option value='$n'>".$blnn[$n]."</option>";
                                   }
                                 }
                             echo "</select></div> <div class='col-xs-3'><select name='thn' class='form-control'><option selected>- Tahun -</option>";
@@ -115,61 +115,63 @@ if ($_GET[act]==''){
                     </thead>
                     <tbody>
                   <?php
-                    if (isset($_GET[kelas]) AND isset($_GET[tahun])){
+                    if (isset($_GET['kelas']) AND isset($_GET['tahun'])){
                       $tampil = mysqli_query(dblink(), "SELECT a.*, e.nama_kelas, b.namamatapelajaran, b.kode_pelajaran, b.kode_kurikulum, c.nama_guru, d.nama_ruangan FROM rb_jadwal_pelajaran a 
                                             JOIN rb_mata_pelajaran b ON a.kode_pelajaran=b.kode_pelajaran
                                               JOIN rb_guru c ON a.nip=c.nip 
                                                 JOIN rb_ruangan d ON a.kode_ruangan=d.kode_ruangan
                                                   JOIN rb_kelas e ON a.kode_kelas=e.kode_kelas 
-                                                  where a.kode_kelas='$_GET[kelas]' 
-                                                    AND a.id_tahun_akademik='$_GET[tahun]' 
-                                                      AND b.kode_kurikulum='$kurikulum[kode_kurikulum]' ORDER BY a.hari DESC");
+                                                  where a.kode_kelas='".$_GET['kelas']."' 
+                                                    AND a.id_tahun_akademik='".$_GET['tahun']."' 
+                                                      AND b.kode_kurikulum='".$kurikulum['kode_kurikulum']."' ORDER BY a.hari DESC");
                     
                     }
                     $no = 1;
-                    while($r=mysqli_fetch_array($tampil)){
-                      if (isset($_GET[gettanggal])){
-                        $sekarangabsen = $_GET[gettanggal];
-                      }else{
-                        if (isset($_POST[lihat])){
-                          $sekarangabsen = $thn."-".$blnc."-".$tglc;
+                    if(isset($tampil)) {
+                      while($r=mysqli_fetch_array($tampil)){
+                        if (isset($_GET['gettanggal'])){
+                          $sekarangabsen = $_GET['gettanggal'];
                         }else{
-                          $sekarangabsen = date("Y-m-d");
+                          if (isset($_POST['lihat'])){
+                            $sekarangabsen = $thn."-".$blnc."-".$tglc;
+                          }else{
+                            $sekarangabsen = date("Y-m-d");
+                          }
                         }
-                      }
 
-                    $a = mysqli_fetch_array(mysqli_query(dblink(), "SELECT * FROM rb_absensi_guru where kodejdwl='$r[kodejdwl]' AND nip='$r[nip]' AND tanggal='$sekarangabsen'"));
-                    echo "<tr><td>$no</td>
-                              <td>$r[namamatapelajaran]</td>
-                              <td>$r[nama_kelas]</td>
-                              <td>$r[nama_guru]</td>
-                              <td>$r[hari]</td>
-                              <td>$r[jam_mulai]</td>
-                              <td>$r[jam_selesai]</td>
-                              <td>$r[nama_ruangan]</td>
-                              <input type='hidden' value='$r[nip]' name='nip[$no]'>
-                              <input type='hidden' value='$r[kode_pelajaran]' name='kode_pelajaran[$no]'>
-                              <input type='hidden' value='$r[kode_kelas]' name='kode_kelas[$no]'>
-                              <td><select style='width:100px;' name='a[$no]' class='form-control'>";
-                                  $kehadiran = mysqli_query(dblink(), "SELECT * FROM rb_kehadiran");
-                                  while ($k = mysqli_fetch_array($kehadiran)){
-                                    if ($a[kode_kehadiran]==$k[kode_kehadiran]){
-                                      echo "<option value='$k[kode_kehadiran]' selected>&#42; $k[nama_kehadiran]</option>";
-                                    }else{
-                                      echo "<option value='$k[kode_kehadiran]'>$k[nama_kehadiran]</option>";
-                                    }
-                                  }
-                              echo "</select></td>
-                                    <input type='hidden' name='jdwl[$no]' value='$r[kodejdwl]'>
-                              </tr>";
-                      $no++;
+                        $a = mysqli_fetch_array(mysqli_query(dblink(), "SELECT * FROM rb_absensi_guru where kodejdwl='".$r['kodejdwl']."' AND nip='".$r['nip']."' AND tanggal='$sekarangabsen'"));
+                        echo "<tr><td>$no</td>
+                        <td>".$r['namamatapelajaran']."</td>
+                        <td>".$r['nama_kelas']."</td>
+                        <td>".$r['nama_guru']."</td>
+                        <td>".$r['hari']."</td>
+                        <td>".$r['jam_mulai']."</td>
+                        <td>".$r['jam_selesai']."</td>
+                        <td>".$r['nama_ruangan']."</td>
+                        <input type='hidden' value='".$r['nip']."' name='nip[$no]'>
+                        <input type='hidden' value='".$r['kode_pelajaran']."' name='kode_pelajaran[$no]'>
+                        <input type='hidden' value='".$r['kode_kelas']."' name='kode_kelas[$no]'>
+                        <td><select style='width:100px;' name='a[$no]' class='form-control'>";
+                        $kehadiran = mysqli_query(dblink(), "SELECT * FROM rb_kehadiran");
+                        while ($k = mysqli_fetch_array($kehadiran)){
+                          if ($a['kode_kehadiran']==$k['kode_kehadiran']){
+                            echo "<option value='".$k['kode_kehadiran']."' selected>&#42; ".$k['nama_kehadiran']."</option>";
+                          }else{
+                            echo "<option value='".$k['kode_kehadiran']."'>".$k['nama_kehadiran']."</option>";
+                          }
+                        }
+                        echo "</select></td>
+                        <input type='hidden' name='jdwl[$no]' value='".$r['kodejdwl']."'>
+                        </tr>";
+                        $no++;
                       }
+                    }
                   ?>
                     </tbody>
                   </table>
                 </div><!-- /.box-body -->
                 <?php 
-                    if ($_GET[kelas] == '' AND $_GET[tahun] == ''){
+                    if ((!isset($_GET['kelas']) OR $_GET['kelas'] == '') AND (!isset($_GET['tahun']) OR $_GET['tahun'] == '')){
                         echo "<center style='padding:60px; color:red'>Silahkan Memilih Tahun akademik dan Kelas Terlebih dahulu...</center>";
                     }
                 ?>
@@ -184,18 +186,18 @@ if ($_GET[act]==''){
               </div><!-- /.box -->
             </div>
 <?php 
-    if (isset($_POST[simpan])){
-      $jml_data = count($_POST[nip]);
-      $nip = $_POST[nip];
-      $kode_pelajaran = $_POST[kode_pelajaran];
-      $kode_kelas = $_POST[kode_kelas];
-      $jdwl = $_POST[jdwl];
-      $a = $_POST[a];
+    if (isset($_POST['simpan'])){
+      $jml_data = count($_POST['nip']);
+      $nip = $_POST['nip'];
+      $kode_pelajaran = $_POST['kode_pelajaran'];
+      $kode_kelas = $_POST['kode_kelas'];
+      $jdwl = $_POST['jdwl'];
+      $a = $_POST['a'];
       
-      $tglabsen = $_POST[filtertgl];
+      $tglabsen = $_POST['filtertgl'];
       for ($i=1; $i <= $jml_data; $i++){
         $cek = mysqli_query(dblink(), "SELECT * FROM rb_absensi_guru where kodejdwl='".$jdwl[$i]."' AND nip='".$nip[$i]."' AND tanggal='$tglabsen'");
-        $total = mysql_num_rows($cek);
+        $total = mysqli_num_rows($cek);
         if ($total >= 1){
            mysqli_query(dblink(), "UPDATE rb_absensi_guru SET kode_kehadiran = '".$a[$i]."' where nip='".$nip[$i]."' AND kodejdwl='".$jdwl[$i]."' AND tanggal='$tglabsen'");
         }else{
@@ -207,7 +209,7 @@ if ($_GET[act]==''){
                                                               '".date('Y-m-d H:i:s')."')");
         }
       }
-        echo "<script>document.location='index.php?view=absenguru&tahun=".$_GET[tahun]."&kelas=".$_GET[kelas]."';</script>";
+        echo "<script>document.location='index.php?view=absenguru&tahun=".$_GET['tahun']."&kelas=".$_GET['kelas']."';</script>";
             
     }
 }
